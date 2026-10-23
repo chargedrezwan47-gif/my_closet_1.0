@@ -1,36 +1,30 @@
+[README.md](https://github.com/user-attachments/files/33878244/README.md)
 # Wardrobe – My Closet
 
-A simple, responsive closet organizer that runs entirely in your browser. It needs no account, server, or external dependencies.
+A responsive, browser-based closet organizer hosted as a static website on GitHub Pages.
 
 ## Features
-
-- Add clothes with a photo, name, type, size, and color
-- Search, filter by type, and sort items
-- Mark items that need washing and filter the “To wash” list
+- Add clothing and accessories with a photo, name, type, size, and color
+- Categories include tops, bottoms, dresses, outerwear, shoes, bags, and accessories
+- Search and sort items
+- Mark items as needing a wash; they move into the bottom-left wash basket and return to the closet when marked washed
+- Favorite items
+- Build, date, save, edit, and delete outfit collections
 - Swipe a card left to remove it, with undo
-- Choose a custom background picture
-- Save and load a JSON backup
-- Light and dark mode
+- Custom background image and light/dark appearance
+- JSON backup and restore for wardrobe items
+- Responsive mobile layout
 
 ## Run locally
-
-Open `index.html` in a modern web browser.
-
-Your closet data is stored in this browser using `localStorage`; it is not uploaded to a server. Data is browser- and site-specific, so use **Save backup** to keep a copy before clearing browser data or moving to another browser/device.
+Open `index.html` in a modern browser.
 
 ## Publish with GitHub Pages
+1. Upload `index.html`, `README.md`, and `LICENSE` to the repository root.
+2. Open **Settings → Pages**.
+3. Select **Deploy from a branch**, branch `main`, folder `/ (root)`, and save.
 
-1. Create a public repository on GitHub.
-2. Upload `index.html`, `LICENSE`, and `README.md` to the repository root.
-3. Open **Settings → Pages**.
-4. Under **Build and deployment**, choose **Deploy from a branch**.
-5. Select the `main` branch and the `/ (root)` folder, then save.
-6. Wait for the deployment to finish. Your site will be available at `https://YOUR-USERNAME.github.io/REPOSITORY-NAME/`. Replace the placeholders with your GitHub username and repository name.
-
-## Contributing
-
-Fork the repository, make your changes, and open a pull request. The app is contained in one HTML file and has no external dependencies.
+## Privacy and storage
+Wardrobe items, photos, favorites, outfits, and background settings are stored in the browser's local storage. They are not uploaded to a server. Browser data is local to that browser/device; use the backup feature to transfer wardrobe items. **Cross-device cloud sync and user accounts are not implemented**; those require configuring a separate backend service such as Firebase or Supabase and setting up authentication/security rules.
 
 ## License
-
-This project is distributed under the MIT License. See [`LICENSE`](LICENSE). Update the copyright holder placeholder in `LICENSE` before publishing.
+MIT. See `LICENSE`.
