@@ -93,6 +93,16 @@ input[type=color]{padding:2px;height:42px}
 .prev{height:150px;border:1px dashed var(--line);border-radius:10px;display:grid;place-items:center;overflow:hidden;background:var(--bg);cursor:pointer;color:var(--mute)}
 .prev img{width:100%;height:100%;object-fit:cover}
 .acts{display:flex;justify-content:flex-end;gap:10px;margin-top:4px}
+ .viewbar{display:flex;gap:8px;overflow-x:auto;padding:4px 0 14px}
+ .viewbar button{white-space:nowrap}.viewbar button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+ .favbtn{border:0;background:var(--panel);position:absolute;right:8px;top:8px;border-radius:50%;width:38px;height:38px;padding:0;font-size:1.25rem;box-shadow:var(--shadow);z-index:1}
+ .favbtn[aria-pressed="true"]{color:#e11d48}
+ .washdock{position:fixed;left:calc(16px + env(safe-area-inset-left,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:18;border:0;border-radius:18px;background:var(--accent);color:var(--accent-ink);box-shadow:0 8px 28px #0003;display:flex;align-items:center;gap:9px;padding:12px 16px;font-weight:700}
+ .washdock .count{background:var(--panel);color:var(--ink);border-radius:999px;padding:1px 7px;font-size:.8rem}
+ .washpanel{position:fixed;left:12px;bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:19;width:min(390px,calc(100vw - 24px));max-height:65vh;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:0 16px 50px #0003;padding:14px}
+ .washpanel[hidden]{display:none}.washhead{display:flex;align-items:center;justify-content:space-between;gap:10px}.washrow{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}.washrow img{width:48px;height:58px;object-fit:cover;border-radius:8px;background:var(--soft)}.washrow .washname{flex:1;min-width:0}.washrow .washname small{display:block;color:var(--mute)}
+ .planner{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;margin:8px 0 20px}.planner h3{margin:0 0 10px}.planner select,.planner input{font:inherit;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);max-width:100%}.planner-tools{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.picklist{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}.pick{display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:9px;padding:8px;min-width:0}.pick img{width:42px;height:48px;object-fit:cover;border-radius:5px}.pick span{overflow-wrap:anywhere;font-size:.88rem}.outfitlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:14px}.outfit{border:1px solid var(--line);border-radius:12px;padding:12px}.outfit h4{margin:0 0 5px}.outfit p{color:var(--mute);font-size:.85rem;margin:0 0 10px}
+ @media(max-width:600px){.wrap{padding:0 12px}nav .wrap{height:auto;min-height:60px;padding-top:8px;padding-bottom:8px;align-items:flex-start}.brand{font-size:1.25rem}.navr{flex-wrap:wrap;justify-content:flex-end}.navr button{padding:7px 9px;font-size:.84rem}.hero{padding-top:24px}.hero h2{font-size:1.7rem}.stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.stat{padding:10px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.info{padding:9px 10px 5px}.foot{padding:0 5px 6px;gap:2px}.wsh,.del{font-size:.75rem;padding:5px 3px}.card{cursor:pointer}.washdock{padding:11px 13px}.two{gap:8px}}
 </style>
 </head>
 <body>
@@ -109,16 +119,20 @@ input[type=color]{padding:2px;height:42px}
     <input id="q" type="search" placeholder="Search by name, type or size" aria-label="Search">
     <select id="sort" aria-label="Sort"><option value="new">Newest first</option><option value="az">Name A–Z</option></select>
   </div>
+  <div class="viewbar" id="viewbar"><button data-view="closet" aria-pressed="true">My closet</button><button data-view="planner" aria-pressed="false">Outfit planner</button><button data-view="favorites" aria-pressed="false">♥ Favorites</button><button data-view="collections" aria-pressed="false">Outfit collections</button></div>
+  <section class="planner" id="planner" hidden></section>
   <div class="chips" id="chips"></div>
   <div class="grid" id="grid"></div>
   <footer>
-    <span>Saved only in this browser. Keep a backup copy.</span>
+    <span>Saved only in this browser. Use backups to move data between devices. Cloud sync needs a separate service.</span>
     <span><button class="ghost" id="exp">Save backup</button> <button class="ghost" id="imp">Load backup</button><input type="file" id="impfile" accept="application/json" hidden></span>
   </footer>
 </main>
 
 <div id="pop" hidden><div class="pbg"></div><div class="pcard" role="dialog" aria-modal="true" aria-label="Item details"><button class="px" id="pclose" aria-label="Close">×</button><div class="pimg"></div><div class="pbody"></div></div></div>
 <div id="toast" role="status"><span>Item removed</span><button id="undo">Undo</button></div>
+<button class="washdock" id="washdock" aria-expanded="false" aria-controls="washpanel">🧺 Wash basket <span class="count" id="washcount">0</span></button>
+<section class="washpanel" id="washpanel" hidden><div class="washhead"><h3 style="margin:0">🧺 Needs washing</h3><button id="closewash" aria-label="Close wash basket">×</button></div><p style="color:var(--mute);font-size:.88rem;margin:5px 0 10px">Items marked “Needs wash” move here. Mark them washed to return them to your closet.</p><div id="washitems"></div></section>
 
 <dialog id="dlg">
   <form id="f" method="dialog">
@@ -136,8 +150,10 @@ input[type=color]{padding:2px;height:42px}
 </dialog>
 
 <script>
-const KEY="my-closet-v1",TYPES=["Tops","Bottoms","Dresses","Outerwear","Shoes","Accessories","Other"];
-let items=[],active="",img="";
+const KEY="my-closet-v1",TYPES=["Tops","Bottoms","Dresses","Outerwear","Shoes","Bags","Accessories","Other"];
+let items=[],active="",img="",view="closet",outfits=[];
+const OUTFIT_KEY="my-closet-outfits-v1";
+try{outfits=JSON.parse(localStorage.getItem(OUTFIT_KEY)||"[]")}catch(e){}
 try{items=JSON.parse(localStorage.getItem(KEY)||"[]")}catch(e){}
 const $=id=>document.getElementById(id);
 TYPES.forEach(t=>$("type").add(new Option(t,t)));
@@ -150,16 +166,33 @@ function render(){
   $("stats").innerHTML=`<div class="stat"><b>${items.length}</b><span>Total pieces</span></div>`+
     ["Tops","Bottoms","Shoes"].map(t=>`<div class="stat"><b>${n(t)}</b><span>${t}</span></div>`).join("")+
     `<div class="stat"><b>${items.filter(i=>!["Tops","Bottoms","Shoes"].includes(i.type)).length}</b><span>Other</span></div>`;
-  $("chips").innerHTML=["","__wash",...TYPES].map(t=>`<button class="chip" aria-pressed="${active===t}" data-t="${t}">${t==="__wash"?"To wash ("+items.filter(i=>i.wash).length+")":t||"All"}${t&&t!=="__wash"?" ("+n(t)+")":""}</button>`).join("");
-  let list=items.filter(i=>(!active||(active==="__wash"?i.wash:i.type===active))&&(!q||(i.name+" "+i.type+" "+i.size).toLowerCase().includes(q)));
+  $("chips").innerHTML=["",...TYPES].map(t=>`<button class="chip" aria-pressed="${active===t}" data-t="${t}">${t||"All"}${t?" ("+n(t)+")":""}</button>`).join("");
+  const washed=items.filter(i=>i.wash);
+  $("washcount").textContent=washed.length;
+  $("washitems").innerHTML=washed.length?washed.map(i=>`<div class="washrow">${i.img?`<img src="${i.img}" alt="">`:'<div style="width:48px;height:58px;background:var(--soft);border-radius:8px"></div>'}<div class="washname"><b>${esc(i.name)}</b><small>${esc(i.type)}</small></div><button data-clean="${i.id}">Washed ✓</button></div>`).join(""):'<p style="color:var(--mute)">Your wash basket is empty.</p>';
+  $("viewbar").querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.view===view)));
+  $("planner").hidden=view!=="planner"&&view!=="collections";
+  $("chips").hidden=view!=="closet";
+  $("grid").hidden=view==="planner"||view==="collections";
+  if(view==="planner"||view==="collections"){renderPlanner();return}
+  let list=items.filter(i=>!i.wash&&(view!=="favorites"||i.favorite)&&(!active||(i.type===active))&&(!q||(i.name+" "+i.type+" "+i.size).toLowerCase().includes(q)));
   if($("sort").value==="az")list=[...list].sort((a,b)=>a.name.localeCompare(b.name));
-  $("grid").innerHTML=list.length?list.map(i=>`<div class="cell"><div class="rm">Remove</div><article class="card" data-id="${i.id}">
+  $("grid").innerHTML=list.length?list.map(i=>`<div class="cell"><div class="rm">Remove</div><article class="card" data-id="${i.id}"><button class="favbtn" data-fav="${i.id}" aria-pressed="${!!i.favorite}" title="Toggle favorite">${i.favorite?"♥":"♡"}</button>
     <div class="ph">${i.wash?'<span class="wb">Needs wash</span>':""}${i.img?`<img src="${i.img}" alt="${esc(i.name)}">`:"No photo"}</div>
     <div class="info"><p class="name">${esc(i.name)}</p><div class="sub"><span class="dot" style="background:${esc(i.color)}"></span>${esc(i.type)}${i.size?" · "+esc(i.size):""}</div></div>
     <div class="foot"><button class="wsh" data-w="${i.id}">${i.wash?"Mark as washed":"Needs wash"}</button><button class="del" data-id="${i.id}">Remove</button></div></article></div>`).join("")
   :`<div class="empty"><h3>${items.length?"No matches":"Your closet is empty"}</h3>${items.length?"Try a different search or category.":"Select “Add item” to add your first piece."}</div>`;
 }
 
+function renderPlanner(){
+ const box=$("planner");
+ if(view==="collections"){
+  box.innerHTML=`<h3>Outfit collections</h3><p style="color:var(--mute);margin-top:0">Saved combinations from your wardrobe.</p>${outfits.length?`<div class="outfitlist">${outfits.map((o,idx)=>`<article class="outfit"><h4>${esc(o.name)}</h4><p>${esc(o.date||"No date planned")} · ${(o.ids||[]).length} pieces</p><p>${(o.ids||[]).map(id=>{const it=items.find(x=>x.id===id);return it?esc(it.name):""}).filter(Boolean).join(" · ")||"Some items are no longer in your closet."}</p><button data-loadout="${idx}">Edit outfit</button> <button data-delout="${idx}" class="del">Delete</button></article>`).join("")}</div>`:'<div class="empty"><h3>No outfits saved yet</h3>Build an outfit in the Outfit planner and save it here.</div>'}`;
+  return;
+ }
+ box.innerHTML=`<h3>Outfit planner</h3><p style="color:var(--mute);margin-top:0">Choose clean items to build a look, give it a name, and optionally plan a date.</p><div class="planner-tools"><input id="outfitname" placeholder="Outfit name (e.g. Weekend look)" aria-label="Outfit name"><input id="outfitdate" type="date" aria-label="Outfit date"><button class="pri" id="saveoutfit">Save outfit</button></div><div class="picklist">${items.filter(i=>!i.wash).map(i=>`<label class="pick"><input type="checkbox" value="${i.id}" class="outfitpick">${i.img?`<img src="${i.img}" alt="">`:'<span style="display:inline-block;width:42px;height:48px;background:var(--soft)"></span>'}<span>${esc(i.name)}<small style="display:block;color:var(--mute)">${esc(i.type)}</small></span></label>`).join("")||'<p>Your closet has no clean items to plan with.</p>'}</div><p style="color:var(--mute);font-size:.85rem">Tip: choose a top, bottom, shoes, and accessories to create a complete look.</p>`;
+ $("saveoutfit").onclick=()=>{const ids=[...box.querySelectorAll(".outfitpick:checked")].map(x=>x.value);const name=$("outfitname").value.trim();if(!name)return alert("Give your outfit a name first.");if(!ids.length)return alert("Choose at least one item.");outfits.unshift({id:Date.now().toString(36),name,date:$("outfitdate").value,ids});try{localStorage.setItem(OUTFIT_KEY,JSON.stringify(outfits))}catch(e){outfits.shift();return alert("Storage is full. Save a backup and try again.")}view="collections";render()};
+}
 function shrink(file,max=600,q=.78){return new Promise(res=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const s=Math.min(1,max/Math.max(im.width,im.height));const c=document.createElement("canvas");c.width=im.width*s;c.height=im.height*s;c.getContext("2d").drawImage(im,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",q))};im.onerror=()=>res("");im.src=r.result};r.onerror=()=>res("");r.readAsDataURL(file)})}
 
 const prev=()=>{$("prev").innerHTML=img?`<img src="${img}" alt="Preview">`:"Tap to add a photo"};
@@ -180,7 +213,8 @@ function openItem(c){
   pc.style.setProperty("--fx",(r.left+r.width/2-innerWidth/2)+"px");
   pc.style.setProperty("--fy",(r.top+r.height/2-innerHeight/2)+"px");
   document.querySelector(".pimg").innerHTML=it.img?`<img src="${it.img}" alt="${esc(it.name)}">`:"No photo";
-  document.querySelector(".pbody").innerHTML=`<h3>${esc(it.name)}</h3><div class="sub"><span class="dot" style="background:${esc(it.color)}"></span>${esc(it.type)}${it.size?" · Size "+esc(it.size):""}</div><div>${it.wash?'<span class="wb" style="position:static;display:inline-block">Needs wash</span>':"Clean and ready to wear"}</div><button class="pri" id="pw">${it.wash?"Mark as washed":"Needs wash"}</button>`;
+  document.querySelector(".pbody").innerHTML=`<h3>${esc(it.name)}</h3><div class="sub"><span class="dot" style="background:${esc(it.color)}"></span>${esc(it.type)}${it.size?" · Size "+esc(it.size):""}</div><div>${it.wash?'<span class="wb" style="position:static;display:inline-block">Needs wash</span>':"Clean and ready to wear"}</div><button id="pfav">${it.favorite?"♥ Remove from favorites":"♡ Add to favorites"}</button><button class="pri" id="pw">${it.wash?"Mark as washed":"Needs wash"}</button>`;
+  $("pfav").onclick=()=>{it.favorite=!it.favorite;save();render();closePop()};
   $("pw").onclick=()=>{it.wash=!it.wash;save();render();closePop()};
   document.querySelectorAll("#pop .bye").forEach(x=>x.classList.remove("bye"));
   $("pop").hidden=false;$("pclose").focus();
@@ -211,8 +245,13 @@ function endSwipe(cancel){
 }
 window.addEventListener("pointerup",()=>endSwipe(false));
 window.addEventListener("pointercancel",()=>endSwipe(true));
-$("grid").onclick=e=>{const w=e.target.dataset.w;if(w){const it=items.find(x=>x.id===w);if(it){it.wash=!it.wash;save();render()}return}const id=e.target.dataset.id;if(!id){const c=e.target.closest(".card");if(c&&!swiped)openItem(c);return}if(confirm("Remove this item?")){items=items.filter(i=>i.id!==id);save();render()}};
+$("grid").onclick=e=>{const fav=e.target.dataset.fav;if(fav){const it=items.find(x=>x.id===fav);if(it){it.favorite=!it.favorite;save();render()}return}const w=e.target.dataset.w;if(w){const it=items.find(x=>x.id===w);if(it){it.wash=!it.wash;save();render()}return}const id=e.target.dataset.id;if(!id){const c=e.target.closest(".card");if(c&&!swiped)openItem(c);return}if(confirm("Remove this item?")){items=items.filter(i=>i.id!==id);save();render()}};
 $("chips").onclick=e=>{if(e.target.dataset.t!==undefined){active=e.target.dataset.t;render()}};
+ $("viewbar").onclick=e=>{const b=e.target.closest("[data-view]");if(b){view=b.dataset.view;active="";render()}};
+ $("washdock").onclick=()=>{$("washpanel").hidden=!$("washpanel").hidden;$("washdock").setAttribute("aria-expanded",String(!$("washpanel").hidden))};
+ $("closewash").onclick=()=>{$("washpanel").hidden=true;$("washdock").setAttribute("aria-expanded","false")};
+ $("washitems").onclick=e=>{const id=e.target.dataset.clean;if(!id)return;const it=items.find(x=>x.id===id);if(it){it.wash=false;save();render()}};
+ $("planner").onclick=e=>{const del=e.target.dataset.delout,load=e.target.dataset.loadout;if(del!==undefined){outfits.splice(Number(del),1);localStorage.setItem(OUTFIT_KEY,JSON.stringify(outfits));render()}if(load!==undefined){const o=outfits[Number(load)];if(!o)return;view="planner";render();setTimeout(()=>{ $("outfitname").value=o.name;$("outfitdate").value=o.date||"";$("planner").querySelectorAll(".outfitpick").forEach(c=>c.checked=o.ids.includes(c.value));const saveBtn=$("saveoutfit");saveBtn.textContent="Update outfit";saveBtn.onclick=()=>{const ids=[...$("planner").querySelectorAll(".outfitpick:checked")].map(c=>c.value);if(!ids.length)return alert("Choose at least one item.");o.name=$("outfitname").value.trim()||o.name;o.date=$("outfitdate").value;o.ids=ids;localStorage.setItem(OUTFIT_KEY,JSON.stringify(outfits));view="collections";render()};},0)}};
 $("q").oninput=render;$("sort").onchange=render;
 $("exp").onclick=()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(items)],{type:"application/json"}));a.download="wardrobe-backup.json";a.click()};
 $("imp").onclick=()=>$("impfile").click();
