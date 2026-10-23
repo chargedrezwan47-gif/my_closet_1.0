@@ -1,4 +1,4 @@
-[README.md](https://github.com/user-attachments/files/33878244/README.md)
+[Uploading README.md…]()
 # Wardrobe – My Closet
 
 A responsive, browser-based closet organizer hosted as a static website on GitHub Pages.
