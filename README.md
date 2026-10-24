@@ -1,4 +1,4 @@
-[README.md](https://github.com/user-attachments/files/33903541/README.md)
+[README.md](https://github.com/user-attachments/files/33903581/README.md)
 # Wardrobe ("my closet")
 
 A playful closet organizer that runs entirely in your browser. No account, no server, no internet needed. The whole app is one HTML file.
