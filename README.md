@@ -1,9 +1,10 @@
-[README.md](https://github.com/user-attachments/files/33903581/README.md)
+[Uploading README.md…]()
 # Wardrobe ("my closet")
 
 A playful closet organizer that runs entirely in your browser. No account, no server, no internet needed. The whole app is one HTML file.
 
 ## Features
+- Built for phones and desktop: a touch-friendly phone layout with its own background, and the full layout on bigger screens
 - Swipe left or right (or use the arrows or keyboard arrow keys) to flip through your clothes, with a whoosh sound
 - Add clothes with a photo, name, type, size and color
 - **Add to wash**: the item flies into the trash can, the can wiggles and the cat gets scared. Tap the can to see the wash list and mark items as washed
