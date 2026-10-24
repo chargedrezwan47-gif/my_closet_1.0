@@ -1,30 +1,38 @@
-[Uploading README.md…]()
-# Wardrobe – My Closet
+[README.md](https://github.com/user-attachments/files/33903541/README.md)
+# Wardrobe ("my closet")
 
-A responsive, browser-based closet organizer hosted as a static website on GitHub Pages.
+A playful closet organizer that runs entirely in your browser. No account, no server, no internet needed. The whole app is one HTML file.
 
 ## Features
-- Add clothing and accessories with a photo, name, type, size, and color
-- Categories include tops, bottoms, dresses, outerwear, shoes, bags, and accessories
-- Search and sort items
-- Mark items as needing a wash; they move into the bottom-left wash basket and return to the closet when marked washed
-- Favorite items
-- Build, date, save, edit, and delete outfit collections
-- Swipe a card left to remove it, with undo
-- Custom background image and light/dark appearance
-- JSON backup and restore for wardrobe items
-- Responsive mobile layout
+- Swipe left or right (or use the arrows or keyboard arrow keys) to flip through your clothes, with a whoosh sound
+- Add clothes with a photo, name, type, size and color
+- **Add to wash**: the item flies into the trash can, the can wiggles and the cat gets scared. Tap the can to see the wash list and mark items as washed
+- **Add to fav**: the item flies into the heart. The Favorites button shows only favorites
+- Search and category tabs
+- Plan outfits (with a shuffle button) and create collections
+- Click sounds, background music (bring your own songs), light and dark mode
+- Custom background picture
+- Save and load a JSON backup
 
-## Run locally
-Open `index.html` in a modern browser.
+## Use it
+Download `index.html` and open it in any browser. That's all.
 
-## Publish with GitHub Pages
-1. Upload `index.html`, `README.md`, and `LICENSE` to the repository root.
-2. Open **Settings → Pages**.
-3. Select **Deploy from a branch**, branch `main`, folder `/ (root)`, and save.
+Your closet is stored in your own browser (localStorage and IndexedDB). Nothing is uploaded anywhere. Use "Save backup" in the menu (the blue circle) to keep a copy.
 
-## Privacy and storage
-Wardrobe items, photos, favorites, outfits, and background settings are stored in the browser's local storage. They are not uploaded to a server. Browser data is local to that browser/device; use the backup feature to transfer wardrobe items. **Cross-device cloud sync and user accounts are not implemented**; those require configuring a separate backend service such as Firebase or Supabase and setting up authentication/security rules.
+## Music
+No song is included. Tap the ♪ button, choose one or more audio files from your device, and they will loop. Your choice is remembered in your browser. Browsers block sound until you interact with the page, so music starts on your first tap.
+
+## Host it free on GitHub Pages
+1. Create a new public repository on GitHub.
+2. Upload `index.html`, `LICENSE` and `README.md`.
+3. Go to Settings, then Pages. Under "Build and deployment", choose "Deploy from a branch", select `main` and `/ (root)`, then save.
+4. After a minute, your site is live at `https://YOUR-USERNAME.github.io/REPO-NAME/`.
+
+## Contributing
+No build step and no dependencies. Fork it, change it, and open a pull request.
+
+## Credits
+Fonts: Gochi Hand and Patrick Hand SC from Google Fonts (loaded online, with fallbacks offline).
 
 ## License
-MIT. See `LICENSE`.
+MIT. See `LICENSE`. Replace "Your Name" in `LICENSE` and at the top of `index.html` with your own name.
